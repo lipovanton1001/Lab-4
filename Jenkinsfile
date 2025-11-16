@@ -1,6 +1,10 @@
 pipeline {
     agent any
     
+    tools {
+        ant 'Ant-1.10'
+    }
+    
     options {
         timestamps()
     }
@@ -15,23 +19,15 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building... BUILD_NUMBER=${BUILD_NUMBER}"
-                sh '/var/jenkins_home/tools/hudson.tasks.Ant_AntInstallation/Ant-1.10/bin/ant -Dignore.failing.tests=true jar'
+                sh 'ant -Dignore.failing.tests=true jar'
                 echo 'Build completed'
             }
         }
         
         stage('Test') {
-            agent {
-                docker {
-                    image 'eclipse-temurin:11'
-                    args '--user root'
-                    reuseNode true
-                }
-            }
             steps {
                 echo 'Running tests...'
-                sh 'java -version'
-                sh '/var/jenkins_home/tools/hudson.tasks.Ant_AntInstallation/Ant-1.10/bin/ant test'
+                sh 'ant test'
                 echo 'Tests completed'
             }
         }
