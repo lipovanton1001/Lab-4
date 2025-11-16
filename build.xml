@@ -1,0 +1,22 @@
+cd "C:\Users\Anton\Технології програмування\Lab-4"
+git add build.xml
+git commit -m "Add build.xml for Jenkins"
+git push origin master
+```
+
+---
+
+### Крок 3: Запустіть збірку знову в Jenkins
+
+Тепер Jenkins зможе знайти `build.xml`, тому що він буде в репозиторії.
+
+---
+
+## Альтернатива (якщо build.xml в підпапці):
+
+Якщо ваш `build.xml` знаходиться НЕ в корені проєкту, а наприклад тут:
+```
+Lab-4/
+  ├── AntProject/
+  │   └── build.xml    ← тут
+  └── ...
