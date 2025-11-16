@@ -25,8 +25,15 @@ pipeline {
         }
         
         stage('Test') {
+            agent {
+                docker {
+                    image 'eclipse-temurin:11'
+                    reuseNode true
+                }
+            }
             steps {
-                echo 'Running tests...'
+                echo 'Running tests in Docker...'
+                sh 'java -version'
                 sh 'ant test'
                 echo 'Tests completed'
             }
