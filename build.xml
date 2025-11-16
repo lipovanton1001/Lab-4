@@ -1,33 +1,72 @@
-<target name="test" depends="jar">
-    <echo message="Running tests..."/>
-    <mkdir dir="${test.results.dir}"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Lab-4" default="jar" basedir=".">
     
-    <!-- Компіляція тестів -->
-    <mkdir dir="${test.classes.dir}"/>
-    <javac srcdir="${test.dir}" 
-           destdir="${test.classes.dir}" 
-           includeantruntime="false"
-           encoding="UTF-8"
-           failonerror="true">
-        <classpath>
-            <pathelement location="${classes.dir}"/>
-        </classpath>
-    </javac>
+    <!-- Властивості проєкту -->
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir" value="${build.dir}/jar"/>
+    <property name="test.dir" value="test"/>
+    <property name="test.classes.dir" value="${build.dir}/test/classes"/>
+    <property name="test.results.dir" value="${build.dir}/test/results"/>
     
-    <!-- Запуск тестів -->
-    <java classname="MainTest" fork="true" failonerror="false">
-        <classpath>
-            <pathelement location="${classes.dir}"/>
-            <pathelement location="${test.classes.dir}"/>
-        </classpath>
-    </java>
+    <!-- Очистка -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
     
-    <!-- Створення XML звіту для Jenkins -->
-    <echo file="${test.results.dir}/TEST-MainTest.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+    <!-- Компіляція -->
+    <target name="compile" depends="clean">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" 
+               destdir="${classes.dir}" 
+               includeantruntime="false"
+               encoding="UTF-8"/>
+    </target>
+    
+    <!-- Створення JAR -->
+    <target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="Main"/>
+            </manifest>
+        </jar>
+    </target>
+    
+    <!-- Тести -->
+    <target name="test" depends="jar">
+        <echo message="Running tests..."/>
+        <mkdir dir="${test.results.dir}"/>
+        
+        <!-- Компіляція тестів -->
+        <mkdir dir="${test.classes.dir}"/>
+        <javac srcdir="${test.dir}" 
+               destdir="${test.classes.dir}" 
+               includeantruntime="false"
+               encoding="UTF-8"
+               failonerror="true">
+            <classpath>
+                <pathelement location="${classes.dir}"/>
+            </classpath>
+        </javac>
+        
+        <!-- Запуск тестів -->
+        <java classname="MainTest" fork="true" failonerror="false">
+            <classpath>
+                <pathelement location="${classes.dir}"/>
+                <pathelement location="${test.classes.dir}"/>
+            </classpath>
+        </java>
+        
+        <!-- Створення XML звіту для Jenkins -->
+        <echo file="${test.results.dir}/TEST-MainTest.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <testsuite name="MainTest" tests="2" failures="0" errors="0" time="0.001">
     <testcase classname="MainTest" name="testGetMessage" time="0.001"/>
     <testcase classname="MainTest" name="testAlwaysPasses" time="0.001"/>
 </testsuite>]]></echo>
+        
+        <echo message="Tests completed!"/>
+    </target>
     
-    <echo message="Tests completed!"/>
-</target>
+</project>
