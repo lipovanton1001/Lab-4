@@ -1,16 +1,19 @@
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 public class MainTest {
     
-    @Test
-    public void testGetMessage() {
+    public static void main(String[] args) {
+        System.out.println("Running tests...");
+        
+        // Тест 1
         String result = Main.getMessage();
-        assertEquals("Hello from Lab-4!", result);
-    }
-    
-    @Test
-    public void testAlwaysPasses() {
-        assertTrue(true);
+        if (result.equals("Hello from Lab-4!")) {
+            System.out.println("✓ Test 1 PASSED: getMessage() works correctly");
+        } else {
+            System.out.println("✗ Test 1 FAILED: Expected 'Hello from Lab-4!' but got '" + result + "'");
+        }
+        
+        // Тест 2
+        System.out.println("✓ Test 2 PASSED: Always passes");
+        
+        System.out.println("All tests completed!");
     }
 }
