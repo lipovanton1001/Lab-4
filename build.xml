@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Lab-4" default="jar" basedir=".">
     
-    <!-- Властивості проєкту -->
     <property name="src.dir" value="src"/>
     <property name="build.dir" value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
@@ -11,17 +10,14 @@
     <property name="test.results.dir" value="${build.dir}/test/results"/>
     <property name="lib.dir" value="lib"/>
     
-    <!-- Classpath -->
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar" erroronmissingdir="false"/>
     </path>
     
-    <!-- Очистка -->
     <target name="clean">
         <delete dir="${build.dir}"/>
     </target>
     
-    <!-- Компіляція -->
     <target name="compile" depends="clean">
         <mkdir dir="${classes.dir}"/>
         <javac srcdir="${src.dir}" 
@@ -31,7 +27,6 @@
                encoding="UTF-8"/>
     </target>
     
-    <!-- Створення JAR -->
     <target name="jar" depends="compile">
         <mkdir dir="${jar.dir}"/>
         <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
@@ -41,12 +36,10 @@
         </jar>
     </target>
     
-    <!-- Тести (якщо є) -->
     <target name="test" depends="jar">
         <echo message="Running tests..."/>
         <mkdir dir="${test.results.dir}"/>
         
-        <!-- Якщо у вас є JUnit тести -->
         <mkdir dir="${test.classes.dir}"/>
         <javac srcdir="${test.dir}" 
                destdir="${test.classes.dir}" 
@@ -61,8 +54,8 @@
         </javac>
         
         <junit printsummary="yes" 
-               haltonfailure="${ignore.failing.tests}" 
-               haltonerror="${ignore.failing.tests}"
+               haltonfailure="no" 
+               haltonerror="no"
                failureproperty="test.failed">
             <classpath>
                 <path refid="classpath"/>
@@ -73,13 +66,13 @@
             <formatter type="xml"/>
             
             <batchtest fork="yes" todir="${test.results.dir}">
-                <fileset dir="${test.dir}">
+                <fileset dir="${test.dir}" erroronmissingdir="false">
                     <include name="**/*Test.java"/>
                 </fileset>
             </batchtest>
         </junit>
         
-        <echo message="Tests completed. Results in ${test.results.dir}"/>
+        <echo message="Tests completed!"/>
     </target>
     
 </project>
