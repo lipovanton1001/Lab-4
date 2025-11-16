@@ -1,26 +1,48 @@
 pipeline {
     agent any
     
+    options {
+        timestamps()
+    }
+    
     stages {
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
+        
         stage('Build') {
             steps {
-                echo 'Building...'
-                sh 'echo "Build stage completed"'
+                echo "Building... BUILD_NUMBER=${BUILD_NUMBER}"
+                echo 'Build completed'
             }
         }
         
         stage('Test') {
+            agent {
+                docker {
+                    image 'openjdk:11'
+                    args '--user root'
+                }
+            }
             steps {
-                echo 'Testing...'
-                sh 'echo "Test stage completed"'
+                echo 'Running tests...'
+                sh 'java -version'
+                echo 'Tests completed'
             }
         }
-        
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
-                sh 'echo "Deploy stage completed"'
-            }
+    }
+    
+    post {
+        always {
+            echo 'Pipeline finished'
+        }
+        success {
+            echo 'Application testing successfully completed!'
+        }
+        failure {
+            echo 'Ooops!!! Tests failed!'
         }
     }
 }
