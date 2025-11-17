@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     tools {
-        ant 'Default'
+        ant 'Ant_1.10'
     }
     
     environment {
