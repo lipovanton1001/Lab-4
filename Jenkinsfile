@@ -49,6 +49,8 @@ pipeline {
         }
         
         stage('Push to Docker Hub') {
+            when {
+                expression { return false } // Вимкнено поки що
             }
             steps {
                 script {
