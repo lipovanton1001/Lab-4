@@ -49,16 +49,13 @@ pipeline {
         }
         
         stage('Push to Docker Hub') {
-            when {
-                expression { return false } // Вимкнено поки що
-            }
             steps {
                 script {
                     echo "Pushing image to Docker Hub..."
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh "echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin"
                         sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                        sh "docker push ${DOCKER_IMAGE}:${DOCKER_IMAGE}:latest"
+                        sh "docker push ${DOCKER_IMAGE}:latest"
                     }
                 }
             }
