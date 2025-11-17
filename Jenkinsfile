@@ -1,6 +1,10 @@
 pipeline {
     agent any
     
+    tools {
+        ant 'Default'
+    }
+    
     environment {
         DOCKER_IMAGE = "lipovanton1001/lab-4"
         DOCKER_TAG = "${BUILD_NUMBER}"
@@ -45,16 +49,17 @@ pipeline {
         }
         
         stage('Push to Docker Hub') {
+            when {
+                expression { return false } // Вимкнено поки що
+            }
             steps {
                 script {
                     echo "Pushing image to Docker Hub..."
-                    // Потрібні credentials для Docker Hub
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh "echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin"
                         sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                        sh "docker push ${DOCKER_IMAGE}:latest"
+                        sh "docker push ${DOCKER_IMAGE}:${DOCKER_IMAGE}:latest"
                     }
-                    echo "Image pushed successfully"
                 }
             }
         }
