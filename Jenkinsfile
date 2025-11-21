@@ -6,7 +6,7 @@ pipeline {
     }
     
     environment {
-        DOCKER_IMAGE = "lipovanton1001/lab-4"
+        DOCKER_IMAGE = "ubrouprou/lab-4"  // Змінено!
         DOCKER_TAG = "${BUILD_NUMBER}"
     }
     
