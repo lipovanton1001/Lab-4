@@ -61,20 +61,17 @@ pipeline {
         
         stage('Run Tests') {
             steps {
-                echo 'Running tests...'
+                echo 'Running JUnit tests...'
                 sh 'mkdir -p ${TEST_RESULTS_DIR}'
-                sh 'java -cp ${CLASSES_DIR}:${TEST_CLASSES_DIR} MainTest'
                 
-                // Створення XML звіту для Jenkins
+                // Запуск JUnit через консоль (потрібен junit-platform-console-standalone)
                 sh '''
-                cat > ${TEST_RESULTS_DIR}/TEST-MainTest.xml << 'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="MainTest" tests="2" failures="0" errors="0" time="0.001">
-    <testcase classname="MainTest" name="testGetMessage" time="0.001"/>
-    <testcase classname="MainTest" name="testAlwaysPasses" time="0.001"/>
-</testsuite>
-EOF
+                    java -jar lib/junit-platform-console-standalone.jar \
+                        --class-path ${CLASSES_DIR}:${TEST_CLASSES_DIR} \
+                        --scan-class-path \
+                        --reports-dir ${TEST_RESULTS_DIR}
                 '''
+                
                 echo 'Tests completed'
             }
         }
