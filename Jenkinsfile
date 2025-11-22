@@ -117,7 +117,6 @@ pipeline {
     post {
         always {
             echo 'Pipeline finished'
-            junit allowEmptyResults: true, testResults: '**/build/test/results/TEST-*.xml'
         }
         success {
             echo 'Application testing successfully completed!'
