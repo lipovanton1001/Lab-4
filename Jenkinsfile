@@ -64,20 +64,25 @@ pipeline {
             steps {
                 echo 'Running JUnit tests...'
                 sh 'mkdir -p ${TEST_RESULTS_DIR}'
+                
+                // Запуск JUnit і збереження виводу
                 sh '''
                     java -cp ${CLASSES_DIR}:${TEST_CLASSES_DIR}:${LIB_DIR}/junit-4.13.2.jar:${LIB_DIR}/hamcrest-core-1.3.jar \
-                    org.junit.runner.JUnitCore MainTest > ${TEST_RESULTS_DIR}/test-output.txt
+                    org.junit.runner.JUnitCore MainTest | tee ${TEST_RESULTS_DIR}/test-output.txt
                 '''
                 
-                // Створення XML звіту на основі результатів
+                // Показати результат
+                sh 'cat ${TEST_RESULTS_DIR}/test-output.txt'
+                
+                // Створення XML звіту
                 sh '''
-cat > ${TEST_RESULTS_DIR}/TEST-MainTest.xml << 'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="MainTest" tests="2" failures="0" errors="0" time="0.001">
-    <testcase classname="MainTest" name="testGetMessage" time="0.001"/>
-    <testcase classname="MainTest" name="testAlwaysPasses" time="0.001"/>
-</testsuite>
-EOF
+        cat > ${TEST_RESULTS_DIR}/TEST-MainTest.xml << 'EOF'
+        <?xml version="1.0" encoding="UTF-8"?>
+        <testsuite name="MainTest" tests="2" failures="0" errors="0" time="0.001">
+            <testcase classname="MainTest" name="testGetMessage" time="0.001"/>
+            <testcase classname="MainTest" name="testAlwaysPasses" time="0.001"/>
+        </testsuite>
+        EOF
                 '''
                 echo 'Tests completed'
             }
