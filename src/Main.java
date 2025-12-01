@@ -5,6 +5,6 @@ public class Main {
     }
     
     public static String getMessage() {
-        return "Hello from Lab-4!";
+        return "Hello from Lab-4";
     }
 }
