@@ -6,7 +6,7 @@ public class MainTest {
     @Test
     public void testGetMessage() {
         String result = Main.getMessage();
-        assertEquals("Hello from Lab-4", result);
+        assertEquals("Hello from Lab-4?", result);
     }
     
     @Test
